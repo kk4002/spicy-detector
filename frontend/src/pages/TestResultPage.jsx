@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { api } from '../api.js';
 import ResultCard from '../components/ResultCard.jsx';
+import ResultActions from '../components/ResultActions.jsx';
 
 // 공유 링크로 진입했을 때 저장된 결과를 보여주는 화면.
 export default function TestResultPage() {
@@ -31,6 +32,7 @@ export default function TestResultPage() {
     <div className="page test-page">
       <h2>공유된 맵력 결과</h2>
       <ResultCard result={result} shareUrl={shareUrl} />
+      <ResultActions result={result} />
       <div className="center">
         <Link className="btn primary" to="/test">나도 맵력 테스트하기</Link>
       </div>

@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import { api } from '../api.js';
 import { useBaseFood } from '../context/BaseFoodContext.jsx';
 import ResultCard from '../components/ResultCard.jsx';
+import ResultActions from '../components/ResultActions.jsx';
 
 export default function TestPage() {
+  const [started, setStarted] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({}); // { questionCode: answerCode }
   const [result, setResult] = useState(null);
@@ -38,28 +40,59 @@ export default function TestPage() {
   const restart = () => {
     setAnswers({});
     setResult(null);
+    setStarted(false);
     window.scrollTo(0, 0);
   };
 
-  if (loading) return <p className="muted">문항 불러오는 중...</p>;
-
+  // ===== 결과 화면 =====
   if (result) {
     const shareUrl = `${window.location.origin}/test/result/${result.shareToken}`;
     return (
       <div className="page test-page">
-        <h2>맵력테스트 결과</h2>
+        <h2>맵력 판독 결과</h2>
         <ResultCard result={result} shareUrl={shareUrl} />
+        <ResultActions result={result} />
         <div className="center">
-          <button className="btn" onClick={restart}>다시 테스트하기</button>
+          <button className="btn primary" onClick={restart}>🔁 다시 테스트하기</button>
         </div>
       </div>
     );
   }
 
+  // ===== 인트로(시작) 화면 =====
+  if (!started) {
+    return (
+      <div className="page test-intro">
+        <h2>내 맵력은 몇 단계일까?</h2>
+        <p className="intro-sub">
+          신라면, 불닭, 핵불닭 기준으로 내가 버틸 수 있는 매운맛을 판독해보세요.
+        </p>
+        <div className="intro-levels muted small">
+          Lv.1 순한맛 시민 · Lv.4 불닭 도전자 · Lv.6 핵불닭 생환자 · Lv.8 위장 파괴자
+        </div>
+        <div className="center">
+          <button
+            className="btn primary big"
+            onClick={() => setStarted(true)}
+            disabled={loading || !!error}
+          >
+            {loading ? '준비 중...' : '맵력 판독 시작하기'}
+          </button>
+          {error && <p className="error">{error}</p>}
+        </div>
+      </div>
+    );
+  }
+
+  // ===== 문항 화면 =====
+  const answeredCount = questions.filter((q) => answers[q.code]).length;
   return (
     <div className="page test-page">
-      <h2>맵력테스트</h2>
-      <p className="muted">질문에 답하면 당신의 맵력 등급과 안전/도전/위험 구간을 판독합니다.</p>
+      <h2>맵력 판독</h2>
+      <div className="progress-line">
+        <div className="progress-bar" style={{ width: `${(answeredCount / questions.length) * 100}%` }} />
+      </div>
+      <p className="muted small">{answeredCount} / {questions.length} 문항 응답</p>
       {error && <p className="error">{error}</p>}
 
       <div className="question-list">
@@ -82,7 +115,7 @@ export default function TestPage() {
       </div>
 
       <div className="center">
-        <button className="btn primary" disabled={!allAnswered || submitting} onClick={submit}>
+        <button className="btn primary big" disabled={!allAnswered || submitting} onClick={submit}>
           {submitting ? '판독 중...' : '결과 보기'}
         </button>
         {!allAnswered && <p className="muted small">모든 문항에 답해주세요.</p>}

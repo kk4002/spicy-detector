@@ -172,6 +172,13 @@ button { font-family: inherit; cursor: pointer; }
 .cat-tab.active { background: var(--red); color: #fff; border-color: var(--red); }
 
 /* ===== test ===== */
+.test-intro { text-align: center; padding-top: 20px; }
+.test-intro h2 { font-size: 30px; }
+.intro-sub { color: #55504c; font-size: 16px; max-width: 460px; margin: 8px auto 14px; }
+.intro-levels { margin-bottom: 24px; }
+.progress-line { height: 8px; background: var(--line); border-radius: 8px; overflow: hidden; margin: 6px 0; }
+.progress-bar { height: 100%; background: linear-gradient(90deg, var(--orange), var(--red)); transition: width .2s; }
+.result-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
 .question-list { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }
 .question { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
 .question h3 { margin: 0 0 12px; font-size: 16px; }
