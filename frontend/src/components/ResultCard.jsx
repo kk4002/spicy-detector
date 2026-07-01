@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { renderResultCanvas, canvasToBlob } from '../resultImage.js';
 
 // 맵력테스트 결과 카드. 제출 직후/공유 조회 화면에서 공용으로 사용한다.
 export default function ResultCard({ result, shareUrl }) {
   const [copied, setCopied] = useState(false);
+  const [busy, setBusy] = useState(false);
 
   const copy = async () => {
     try {
@@ -14,18 +16,47 @@ export default function ResultCard({ result, shareUrl }) {
     }
   };
 
-  // 모바일 등에서 네이티브 공유 시트 사용. 미지원 시 링크 복사로 폴백.
-  const nativeShare = async () => {
-    const text = result.shareText || '매움판독기 결과';
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: '매움판독기', text, url: shareUrl });
-        return;
-      } catch (e) {
-        // 사용자가 취소했거나 실패 → 복사로 폴백
-      }
+  // 결과를 PNG 이미지로 저장(다운로드)
+  const saveImage = async () => {
+    setBusy(true);
+    try {
+      const blob = await canvasToBlob(renderResultCanvas(result));
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `맵력_${result.badgeName}.png`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } finally {
+      setBusy(false);
     }
-    copy();
+  };
+
+  // 공유: 가능하면 이미지 파일까지 공유(모바일), 아니면 텍스트+링크, 최종 폴백은 링크 복사
+  const share = async () => {
+    setBusy(true);
+    try {
+      const blob = await canvasToBlob(renderResultCanvas(result));
+      const file = new File([blob], '맵력판독.png', { type: 'image/png' });
+      const text = `${result.shareText}\n${shareUrl}`;
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({ files: [file], title: '매움판독기', text });
+          return;
+        } catch (e) { /* 취소/실패 → 폴백 */ }
+      }
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: '매움판독기', text: result.shareText, url: shareUrl });
+          return;
+        } catch (e) { /* 취소/실패 → 폴백 */ }
+      }
+      copy();
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -69,10 +100,15 @@ export default function ResultCard({ result, shareUrl }) {
       {shareUrl && (
         <div className="share-box">
           <p className="share-text">{result.shareText}</p>
-          <div className="share-row">
+          <div className="share-buttons">
+            <button onClick={share} className="btn primary" disabled={busy}>
+              {busy ? '준비 중...' : '📤 공유하기'}
+            </button>
+            <button onClick={saveImage} className="btn" disabled={busy}>🖼️ 이미지 저장</button>
+            <button onClick={copy} className="btn">{copied ? '복사됨!' : '🔗 링크 복사'}</button>
+          </div>
+          <div className="share-url">
             <input readOnly value={shareUrl} onFocus={(e) => e.target.select()} />
-            <button onClick={copy}>{copied ? '복사됨!' : '링크 복사'}</button>
-            <button className="share-native" onClick={nativeShare}>공유하기</button>
           </div>
         </div>
       )}
