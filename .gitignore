@@ -1,0 +1,28 @@
+# ===== 백엔드 (Maven / Java) =====
+backend/target/
+*.class
+*.jar
+!**/.mvn/wrapper/maven-wrapper.jar
+
+# ===== 프론트엔드 (Node) =====
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# ===== IDE =====
+.idea/
+*.iml
+.settings/
+.project
+.classpath
+.factorypath
+bin/
+
+# ===== 로그/임시 =====
+*.log
+logs/
+*.tmp
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
