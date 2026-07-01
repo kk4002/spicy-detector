@@ -82,10 +82,10 @@ public class SpicyItemService {
                 : itemRepository.findAll();
 
         return items.stream()
-                // 대표 수치가 있는 항목을 우선 상단에, 없는 항목은 하단에
-                .sorted(Comparator.comparing(
-                        (SpicyItem i) -> i.representativeShu() == null ? Integer.MIN_VALUE : i.representativeShu())
-                        .reversed())
+                // 공식/추정 수치가 없는 비정형(체감 기반) 항목은 랭킹에서 제외한다.
+                // (검색·상세에서는 여전히 '체감 기반'으로 노출)
+                .filter(i -> i.representativeShu() != null)
+                .sorted(Comparator.comparing(SpicyItem::representativeShu).reversed())
                 .map(item -> toSummary(item, base))
                 .collect(Collectors.toList());
     }

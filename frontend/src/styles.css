@@ -59,6 +59,11 @@ button { font-family: inherit; cursor: pointer; }
 .btn.primary { background: var(--red); color: #fff; border-color: var(--red); }
 .btn:disabled { opacity: .5; cursor: not-allowed; }
 
+.home-ranking { margin-top: 36px; }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; }
+.section-head h3 { margin: 0; }
+.more-link { color: var(--red); font-weight: 700; font-size: 14px; }
+
 .home-note { margin-top: 32px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px 22px; }
 .home-note h3 { margin-top: 0; }
 .home-note ul { margin: 0; padding-left: 18px; color: #55504c; }

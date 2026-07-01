@@ -70,7 +70,7 @@ export default function DetailPage() {
         <div className="source-box">
           <b>출처/신뢰도 안내</b>
           <p>
-            출처 유형: {item.sourceType || '미상'} · 신뢰도: {item.confidenceLevel}
+            출처 유형: {item.sourceTypeLabel || item.sourceType || '미상'} · 신뢰도: {item.confidenceLevel}
           </p>
           {item.sourceNote && <p className="muted">{item.sourceNote}</p>}
           {item.sourceUrl && (

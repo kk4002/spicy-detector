@@ -1,10 +1,22 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import BaseFoodSelector from '../components/BaseFoodSelector.jsx';
+import SpicyItemCard from '../components/SpicyItemCard.jsx';
+import { api } from '../api.js';
+import { useBaseFood } from '../context/BaseFoodContext.jsx';
 
 export default function HomePage() {
   const [keyword, setKeyword] = useState('');
+  const [topItems, setTopItems] = useState([]);
   const navigate = useNavigate();
+  const { baseItemId } = useBaseFood();
+
+  // 기본 랭킹(매운순) 미리보기 — 바로 눌러서 상세로 들어갈 수 있게
+  useEffect(() => {
+    api.getRanking(undefined, baseItemId)
+      .then((res) => setTopItems((res.items || []).slice(0, 8)))
+      .catch(() => setTopItems([]));
+  }, [baseItemId]);
 
   const submit = (e) => {
     e.preventDefault();
@@ -41,6 +53,21 @@ export default function HomePage() {
           <button className="btn" onClick={() => navigate('/ranking')}>매운맛 랭킹 보기</button>
         </div>
       </section>
+
+      {topItems.length > 0 && (
+        <section className="home-ranking">
+          <div className="section-head">
+            <h3>🔥 매운맛 랭킹</h3>
+            <Link to="/ranking" className="more-link">전체 보기 →</Link>
+          </div>
+          <p className="muted small">눌러서 상세로 들어가고, 상세의 "비슷한 매운맛"으로 계속 타고 넘어가 보세요.</p>
+          <div className="item-list">
+            {topItems.map((item, idx) => (
+              <SpicyItemCard key={item.id} item={item} rank={idx + 1} />
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="home-note">
         <h3>어떻게 판독하나요?</h3>

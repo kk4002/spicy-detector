@@ -23,6 +23,7 @@ public class SpicyItemDetail {
     public final String shuText;
     public final Boolean officialYn;
     public final SourceType sourceType;
+    public final String sourceTypeLabel;
     public final String sourceUrl;
     public final String sourceNote;
     public final ConfidenceLevel confidenceLevel;
@@ -48,6 +49,7 @@ public class SpicyItemDetail {
         this.shuText = item.getShuText();
         this.officialYn = item.getOfficialYn();
         this.sourceType = item.getSourceType();
+        this.sourceTypeLabel = item.getSourceType() != null ? item.getSourceType().getLabel() : null;
         this.sourceUrl = item.getSourceUrl();
         this.sourceNote = item.getSourceNote();
         this.confidenceLevel = item.getConfidenceLevel();
