@@ -31,6 +31,8 @@ export const api = {
     request(`/spicy-items/${id}` + (baseItemId ? `?baseItemId=${baseItemId}` : '')),
   getSimilar: (id, range = 20) =>
     request(`/spicy-items/${id}/similar?range=${range}`),
+  getNeighbors: (id, perSide = 5) =>
+    request(`/spicy-items/${id}/neighbors?perSide=${perSide}`),
   getRanking: (category, baseItemId) =>
     request(`/spicy-items/ranking` +
       (category ? `?category=${category}` : '?') +

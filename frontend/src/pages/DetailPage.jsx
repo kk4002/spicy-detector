@@ -3,12 +3,21 @@ import { useParams, Link } from 'react-router-dom';
 import { api } from '../api.js';
 import { useBaseFood } from '../context/BaseFoodContext.jsx';
 import BaseFoodSelector from '../components/BaseFoodSelector.jsx';
-import ConfidenceBadge from '../components/ConfidenceBadge.jsx';
+import DataBasisBadge from '../components/DataBasisBadge.jsx';
+
+// 기준 음식(=100) 대비 상대 지수로 도전 난이도 구간을 판정한다.
+function challengeLevel(score) {
+  if (score == null) return null;
+  if (score <= 110) return { label: '안전 구간', cls: 'zone-safe' };
+  if (score <= 180) return { label: '도전 구간', cls: 'zone-challenge' };
+  return { label: '위험 구간', cls: 'zone-danger' };
+}
 
 export default function DetailPage() {
   const { id } = useParams();
-  const { baseItemId } = useBaseFood();
+  const { baseItemId, baseFood } = useBaseFood();
   const [item, setItem] = useState(null);
+  const [neighbors, setNeighbors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -19,6 +28,10 @@ export default function DetailPage() {
       .then(setItem)
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
+    // 이 음식 기준 위/아래 순위 (전역 랭킹과 별개인 로컬 순위)
+    api.getNeighbors(id, 5)
+      .then((res) => setNeighbors(res.items || []))
+      .catch(() => setNeighbors([]));
   }, [id, baseItemId]);
 
   if (loading) return <p className="muted">불러오는 중...</p>;
@@ -26,6 +39,7 @@ export default function DetailPage() {
   if (!item) return null;
 
   const rel = item.relativeScore;
+  const challenge = rel ? challengeLevel(rel.scoreMax) : null;
 
   return (
     <div className="page detail-page">
@@ -38,8 +52,13 @@ export default function DetailPage() {
         <div className="detail-tags">
           {item.brand && <span className="item-brand">{item.brand}</span>}
           <span className="cat-chip">{item.categoryLabel}</span>
-          <ConfidenceBadge level={item.confidenceLevel} />
+          <DataBasisBadge basis={item.dataBasis} />
           {item.officialYn && <span className="official">공식값</span>}
+          {challenge && (
+            <span className={`challenge-tag ${challenge.cls}`}>
+              {baseFood ? `${baseFood.name} 기준 ` : ''}{challenge.label}
+            </span>
+          )}
         </div>
       </div>
 
@@ -77,6 +96,29 @@ export default function DetailPage() {
             <p><a href={item.sourceUrl} target="_blank" rel="noreferrer">출처 링크</a></p>
           )}
           <p className="muted small">제품별·국가별·제조 시점별 차이가 있을 수 있습니다.</p>
+        </div>
+      )}
+
+      {neighbors.length > 1 && (
+        <div className="neighbor-section">
+          <h3>🌡️ {item.name} 기준 매운맛 순위</h3>
+          <p className="muted small">위로 갈수록 더 맵고, 아래로 갈수록 덜 맵습니다. ({item.name} = 100)</p>
+          <div className="neighbor-list">
+            {neighbors.map((n) => (
+              n.anchor ? (
+                <div key={n.id} className="neighbor-row anchor">
+                  <span className="n-name">{n.name}</span>
+                  <span className="n-rel">100</span>
+                </div>
+              ) : (
+                <Link key={n.id} to={`/items/${n.id}`} className="neighbor-row">
+                  <span className="n-name">{n.name}</span>
+                  <span className="n-cat">{n.categoryLabel}</span>
+                  <span className="n-rel">{n.relativeToAnchor}</span>
+                </Link>
+              )
+            ))}
+          </div>
         </div>
       )}
 

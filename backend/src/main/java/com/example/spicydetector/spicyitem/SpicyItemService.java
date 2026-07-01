@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.spicydetector.common.Category;
 import com.example.spicydetector.common.NotFoundException;
+import com.example.spicydetector.spicyitem.dto.NeighborItem;
 import com.example.spicydetector.spicyitem.dto.RelativeScore;
 import com.example.spicydetector.spicyitem.dto.SimilarItem;
 import com.example.spicydetector.spicyitem.dto.SpicyItemDetail;
@@ -88,6 +89,49 @@ public class SpicyItemService {
                 .sorted(Comparator.comparing(SpicyItem::representativeShu).reversed())
                 .map(item -> toSummary(item, base))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 이 음식을 기준으로 매운맛이 바로 위(더 매운)/아래(덜 매운)인 음식들을 순위로 반환한다.
+     * perSide 만큼 위/아래를 잘라 anchor 를 가운데 두고 정렬(매운 순 내림차순)한다.
+     * 수치가 없는 비정형 항목이 기준이면 자기 자신만 반환한다.
+     */
+    public List<NeighborItem> getNeighbors(Long id, int perSide) {
+        SpicyItem anchor = findRaw(id);
+        List<NeighborItem> result = new ArrayList<>();
+
+        if (anchor.representativeShu() == null) {
+            result.add(new NeighborItem(anchor, null, true));
+            return result;
+        }
+
+        // 수치 있는 항목만 매운 순으로 정렬
+        List<SpicyItem> ranked = itemRepository.findAll().stream()
+                .filter(i -> i.representativeShu() != null)
+                .sorted(Comparator.comparing(SpicyItem::representativeShu).reversed())
+                .collect(Collectors.toList());
+
+        int idx = -1;
+        for (int i = 0; i < ranked.size(); i++) {
+            if (ranked.get(i).getId().equals(anchor.getId())) {
+                idx = i;
+                break;
+            }
+        }
+        if (idx < 0) {
+            result.add(new NeighborItem(anchor, 100, true));
+            return result;
+        }
+
+        int start = Math.max(0, idx - perSide);
+        int end = Math.min(ranked.size(), idx + perSide + 1);
+        for (int i = start; i < end; i++) {
+            SpicyItem it = ranked.get(i);
+            boolean isAnchor = i == idx;
+            Integer rel = isAnchor ? 100 : calculator.relativeScoreValue(it, anchor);
+            result.add(new NeighborItem(it, rel, isAnchor));
+        }
+        return result;
     }
 
     /** 기준 음식으로 쓰기 좋은 대표 음식 목록 (라면 중심). */

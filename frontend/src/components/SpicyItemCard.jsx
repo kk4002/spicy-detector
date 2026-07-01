@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import ConfidenceBadge from './ConfidenceBadge.jsx';
+import DataBasisBadge from './DataBasisBadge.jsx';
 
 // 검색 결과/랭킹에서 사용하는 음식 카드.
 export default function SpicyItemCard({ item, rank }) {
@@ -24,7 +24,7 @@ export default function SpicyItemCard({ item, rank }) {
             <small>기준=100</small>
           </div>
         )}
-        <ConfidenceBadge level={item.confidenceLevel} />
+        <DataBasisBadge basis={item.dataBasis} />
       </div>
     </Link>
   );

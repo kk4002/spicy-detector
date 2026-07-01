@@ -18,6 +18,8 @@ public class SpicyItemSummary {
     public final String shuText;
     public final String perceivedLabel;
     public final ConfidenceLevel confidenceLevel;
+    /** 데이터 기준 뱃지: 공식/추정/체감/샘플 */
+    public final String dataBasis;
     /** 기준 음식 대비 상대 지수 (검색 시 기준 음식이 선택된 경우에만 채워짐) */
     public final Integer relativeScore;
 
@@ -32,6 +34,7 @@ public class SpicyItemSummary {
         this.shuText = item.getShuText();
         this.perceivedLabel = perceivedLabel;
         this.confidenceLevel = item.getConfidenceLevel();
+        this.dataBasis = item.getSourceType() != null ? item.getSourceType().basis() : "샘플";
         this.relativeScore = relativeScore;
     }
 }

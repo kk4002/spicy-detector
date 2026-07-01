@@ -27,6 +27,8 @@ public class SpicyItemDetail {
     public final String sourceUrl;
     public final String sourceNote;
     public final ConfidenceLevel confidenceLevel;
+    /** 데이터 기준 뱃지: 공식/추정/체감/샘플 */
+    public final String dataBasis;
     public final String perceivedLabel;
     public final String description;
 
@@ -53,6 +55,7 @@ public class SpicyItemDetail {
         this.sourceUrl = item.getSourceUrl();
         this.sourceNote = item.getSourceNote();
         this.confidenceLevel = item.getConfidenceLevel();
+        this.dataBasis = item.getSourceType() != null ? item.getSourceType().basis() : "샘플";
         this.perceivedLabel = perceivedLabel;
         this.description = item.getDescription();
         this.relativeScore = relativeScore;

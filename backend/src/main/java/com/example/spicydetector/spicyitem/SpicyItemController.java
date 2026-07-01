@@ -64,6 +64,18 @@ public class SpicyItemController {
         return itemService.getDetail(id, baseItemId);
     }
 
+    /** 이 음식 기준 위/아래 매운맛 순위 (로컬 랭킹) */
+    @GetMapping("/{id}/neighbors")
+    public Map<String, Object> neighbors(@PathVariable Long id,
+                                         @RequestParam(defaultValue = "5") int perSide) {
+        SpicyItem item = itemService.findRaw(id);
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("anchorId", id);
+        body.put("anchorName", item.getName());
+        body.put("items", itemService.getNeighbors(id, perSide));
+        return body;
+    }
+
     /** 비슷한 매움 찾기 */
     @GetMapping("/{id}/similar")
     public Map<String, Object> similar(@PathVariable Long id,

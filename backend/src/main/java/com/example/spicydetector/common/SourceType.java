@@ -34,4 +34,26 @@ public enum SourceType {
     public String getLabel() {
         return label;
     }
+
+    /**
+     * 화면 표시용 데이터 기준 뱃지(공식/추정/체감/샘플)로 단순화한다.
+     */
+    public String basis() {
+        switch (this) {
+            case OFFICIAL_MANUFACTURER:
+            case OFFICIAL_LAB:
+                return "공식";
+            case PUBLIC_RESEARCH:
+            case NEWS:
+            case REFERENCE_SITE:
+            case COMMUNITY_ESTIMATE:
+                return "추정";
+            case USER_PERCEIVED:
+            case UNKNOWN:
+                return "체감";
+            case SAMPLE:
+            default:
+                return "샘플";
+        }
+    }
 }

@@ -48,10 +48,9 @@ export default function HomePage() {
         </div>
 
         <div className="hero-actions">
-          <button className="btn primary" onClick={() => navigate('/test')}>맵력테스트 시작하기</button>
-          <button className="btn" onClick={() => navigate('/search')}>음식 검색하기</button>
-          <button className="btn" onClick={() => navigate('/ranking')}>매운맛 랭킹 보기</button>
+          <button className="btn primary big" onClick={() => navigate('/test')}>🌶️ 내 맵력 판독하기</button>
         </div>
+        <p className="hero-sub muted small">위 검색창에서 음식별 매움도 바로 확인할 수도 있어요.</p>
       </section>
 
       {topItems.length > 0 && (

@@ -57,7 +57,10 @@ button { font-family: inherit; cursor: pointer; }
 
 .btn { padding: 11px 18px; border-radius: 10px; border: 1px solid var(--line); background: #fff; font-weight: 700; color: var(--ink); }
 .btn.primary { background: var(--red); color: #fff; border-color: var(--red); }
+.btn.big { font-size: 18px; padding: 15px 30px; border-radius: 12px; }
 .btn:disabled { opacity: .5; cursor: not-allowed; }
+.hero-sub { margin-top: 10px; }
+.nav-admin { font-weight: 600; opacity: .6; }
 
 .home-ranking { margin-top: 36px; }
 .section-head { display: flex; align-items: baseline; justify-content: space-between; }
@@ -102,6 +105,32 @@ button { font-family: inherit; cursor: pointer; }
 .rel-score { text-align: center; color: var(--red); }
 .rel-score b { font-size: 20px; }
 .rel-score small { display: block; font-size: 10px; color: var(--muted); }
+
+/* ===== data-basis badge (공식/추정/체감/샘플) ===== */
+.basis-badge { font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+.basis-official { background: #e4f6ea; color: #1f7a41; }
+.basis-estimate { background: #fff3d9; color: #a9720b; }
+.basis-perceived { background: #eae6fb; color: #5b46b3; }
+.basis-sample { background: #eeeae7; color: #6c6560; }
+
+/* 도전 난이도 태그 */
+.challenge-tag { font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 20px; color: #fff; }
+.challenge-tag.zone-safe { background: var(--safe); }
+.challenge-tag.zone-challenge { background: var(--challenge); }
+.challenge-tag.zone-danger { background: var(--danger); }
+
+/* ===== 이 음식 기준 위/아래 순위 ===== */
+.neighbor-section { margin-top: 24px; }
+.neighbor-list { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; }
+.neighbor-row { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid var(--line); }
+.neighbor-row:last-child { border-bottom: none; }
+.neighbor-row .n-name { flex: 1; font-weight: 600; }
+.neighbor-row .n-cat { font-size: 11px; color: var(--muted); }
+.neighbor-row .n-rel { font-weight: 800; color: var(--red); min-width: 44px; text-align: right; }
+.neighbor-row.anchor { background: #fff6f4; }
+.neighbor-row.anchor .n-name { color: var(--red); font-weight: 800; }
+.neighbor-row.anchor .n-rel { color: var(--ink); }
+.share-native { background: var(--red) !important; }
 
 /* ===== confidence badge ===== */
 .conf-badge { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }

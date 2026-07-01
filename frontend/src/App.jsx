@@ -13,10 +13,9 @@ export default function App() {
       <header className="app-header">
         <Link to="/" className="logo">🌶️ 매움판독기</Link>
         <nav className="app-nav">
-          <NavLink to="/search">검색</NavLink>
-          <NavLink to="/ranking">랭킹</NavLink>
-          <NavLink to="/test">맵력테스트</NavLink>
-          <NavLink to="/admin">관리자</NavLink>
+          <NavLink to="/test">맵력판독</NavLink>
+          <NavLink to="/ranking">매움랭킹</NavLink>
+          <NavLink to="/admin" className="nav-admin">관리자</NavLink>
         </nav>
       </header>
 

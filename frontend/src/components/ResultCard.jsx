@@ -14,6 +14,20 @@ export default function ResultCard({ result, shareUrl }) {
     }
   };
 
+  // 모바일 등에서 네이티브 공유 시트 사용. 미지원 시 링크 복사로 폴백.
+  const nativeShare = async () => {
+    const text = result.shareText || '매움판독기 결과';
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: '매움판독기', text, url: shareUrl });
+        return;
+      } catch (e) {
+        // 사용자가 취소했거나 실패 → 복사로 폴백
+      }
+    }
+    copy();
+  };
+
   return (
     <div className="result-card">
       <div className="badge-emblem">Lv.{result.level}</div>
@@ -58,6 +72,7 @@ export default function ResultCard({ result, shareUrl }) {
           <div className="share-row">
             <input readOnly value={shareUrl} onFocus={(e) => e.target.select()} />
             <button onClick={copy}>{copied ? '복사됨!' : '링크 복사'}</button>
+            <button className="share-native" onClick={nativeShare}>공유하기</button>
           </div>
         </div>
       )}
