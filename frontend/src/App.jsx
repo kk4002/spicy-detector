@@ -14,6 +14,7 @@ export default function App() {
         <Link to="/" className="logo">🌶️ 매움판독기</Link>
         <nav className="app-nav">
           <NavLink to="/test">맵력판독</NavLink>
+          <NavLink to="/search">음식검색</NavLink>
           <NavLink to="/ranking">매움랭킹</NavLink>
           <NavLink to="/admin" className="nav-admin">관리자</NavLink>
         </nav>

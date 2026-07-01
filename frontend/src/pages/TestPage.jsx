@@ -67,9 +67,6 @@ export default function TestPage() {
         <p className="intro-sub">
           신라면, 불닭, 핵불닭 기준으로 내가 버틸 수 있는 매운맛을 판독해보세요.
         </p>
-        <div className="intro-levels muted small">
-          Lv.1 순한맛 시민 · Lv.4 불닭 도전자 · Lv.6 핵불닭 생환자 · Lv.8 위장 파괴자
-        </div>
         <div className="center">
           <button
             className="btn primary big"
