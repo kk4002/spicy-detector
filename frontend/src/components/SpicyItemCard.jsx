@@ -1,8 +1,13 @@
 import { Link } from 'react-router-dom';
 import DataBasisBadge from './DataBasisBadge.jsx';
+import { useBaseFood } from '../context/BaseFoodContext.jsx';
+import { formatRelative } from '../format.js';
 
 // 검색 결과/랭킹에서 사용하는 음식 카드.
 export default function SpicyItemCard({ item, rank }) {
+  const { baseFood } = useBaseFood();
+  const baseName = baseFood ? baseFood.name : '기준';
+
   return (
     <Link to={`/items/${item.id}`} className="item-card">
       {rank != null && <div className="rank-num">{rank}</div>}
@@ -19,9 +24,9 @@ export default function SpicyItemCard({ item, rank }) {
       </div>
       <div className="item-side">
         {item.relativeScore != null && (
-          <div className="rel-score" title="기준 음식 대비 상대 지수">
-            <b>{item.relativeScore}</b>
-            <small>기준=100</small>
+          <div className="rel-score" title={`${baseName}을(를) 100으로 봤을 때의 상대 지수`}>
+            <b>{formatRelative(item.relativeScore)}</b>
+            <small>{baseName} 기준(=100)</small>
           </div>
         )}
         <DataBasisBadge basis={item.dataBasis} />

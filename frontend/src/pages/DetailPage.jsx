@@ -4,6 +4,7 @@ import { api } from '../api.js';
 import { useBaseFood } from '../context/BaseFoodContext.jsx';
 import BaseFoodSelector from '../components/BaseFoodSelector.jsx';
 import DataBasisBadge from '../components/DataBasisBadge.jsx';
+import { formatRelative } from '../format.js';
 
 // 기준 음식(=100) 대비 상대 지수로 도전 난이도 구간을 판정한다.
 function challengeLevel(score) {
@@ -114,7 +115,7 @@ export default function DetailPage() {
                 <Link key={n.id} to={`/items/${n.id}`} className="neighbor-row">
                   <span className="n-name">{n.name}</span>
                   <span className="n-cat">{n.categoryLabel}</span>
-                  <span className="n-rel">{n.relativeToAnchor}</span>
+                  <span className="n-rel">{formatRelative(n.relativeToAnchor)}</span>
                 </Link>
               )
             ))}

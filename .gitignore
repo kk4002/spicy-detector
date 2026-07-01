@@ -9,6 +9,9 @@ frontend/node_modules/
 frontend/dist/
 frontend/.vite/
 
+# 데모용으로 백엔드가 서빙하는 빌드 산출물(소스 아님)은 커밋하지 않음
+backend/src/main/resources/static/
+
 # ===== IDE =====
 .idea/
 *.iml

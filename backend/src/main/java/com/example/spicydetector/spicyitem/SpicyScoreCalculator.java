@@ -42,11 +42,18 @@ public class SpicyScoreCalculator {
             scoreMax = tmp;
         }
 
+        // 아주 큰 값(기준의 10배 이상)은 "약 N배"로 표현해 정체불명의 큰 숫자가 노출되지 않게 한다.
         String text;
-        if (scoreMin == scoreMax) {
-            text = String.format("%s 기준 약 %d", base.getName(), scoreMin);
+        if (scoreMax >= 1000) {
+            int minMul = Math.round(scoreMin / 100f);
+            int maxMul = Math.round(scoreMax / 100f);
+            text = (minMul == maxMul)
+                    ? String.format("%s의 약 %d배", base.getName(), maxMul)
+                    : String.format("%s의 약 %d~%d배", base.getName(), minMul, maxMul);
+        } else if (scoreMin == scoreMax) {
+            text = String.format("%s 기준 약 %d (=100)", base.getName(), scoreMin);
         } else {
-            text = String.format("%s 기준 약 %d~%d", base.getName(), scoreMin, scoreMax);
+            text = String.format("%s 기준 약 %d~%d (=100)", base.getName(), scoreMin, scoreMax);
         }
         return new RelativeScore(base.getName(), scoreMin, scoreMax, text);
     }

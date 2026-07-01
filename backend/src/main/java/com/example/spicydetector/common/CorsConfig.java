@@ -21,8 +21,12 @@ public class CorsConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
+        // 프론트를 백엔드가 same-origin 으로 서빙하거나 임시 터널로 공개할 때,
+        // 브라우저가 붙이는 Origin(고정 불가한 터널 도메인 등)이 차단되지 않도록 패턴 와일드카드를 사용한다.
+        // 명시된 allowedOrigins(개발 서버)는 그대로 허용 목록에 포함한다.
         registry.addMapping("/api/**")
                 .allowedOrigins(allowedOrigins)
+                .allowedOriginPatterns("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
