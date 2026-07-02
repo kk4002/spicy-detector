@@ -193,7 +193,34 @@ button { font-family: inherit; cursor: pointer; }
   background: linear-gradient(135deg, var(--orange), var(--red)); color: #fff;
   display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px;
 }
-.badge-name { margin: 0 0 8px; color: var(--red); }
+.badge-emblem { font-size: 40px; }
+.emblem-lv { display: block; font-size: 15px; margin-top: -4px; }
+.badge-name { margin: 0 0 4px; color: var(--red); }
+.badge-meme { margin: 0 0 12px; color: var(--muted); font-style: italic; font-weight: 600; }
+
+/* ===== 개인화 판독 배너 ===== */
+.my-verdict { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 16px; border-radius: 12px; margin-bottom: 16px; color: #fff; }
+.my-verdict.zone-safe { background: var(--safe); }
+.my-verdict.zone-challenge { background: var(--challenge); }
+.my-verdict.zone-danger { background: var(--danger); }
+.my-verdict.none { background: #f3ede9; color: #55504c; }
+.my-verdict .mv-badge { font-size: 12px; font-weight: 700; background: rgba(255,255,255,0.25); padding: 3px 10px; border-radius: 20px; }
+.my-verdict .mv-label { font-weight: 800; font-size: 17px; }
+.my-verdict .mv-desc { font-size: 13px; opacity: .95; }
+.my-verdict .mv-cta { margin-left: auto; font-weight: 700; color: var(--red); }
+
+/* ===== 매운맛 대결 ===== */
+.versus-form { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
+.versus-form select { flex: 1; min-width: 120px; padding: 10px; border: 1px solid var(--line); border-radius: 10px; font-size: 15px; }
+.vs-x { font-weight: 800; color: var(--muted); }
+.versus-cards { display: flex; align-items: stretch; gap: 12px; margin-top: 8px; }
+.vs-card { flex: 1; display: flex; flex-direction: column; gap: 6px; align-items: center; justify-content: center; padding: 22px 12px; background: #fff; border: 2px solid var(--line); border-radius: 14px; text-align: center; }
+.vs-card.win { border-color: var(--red); background: #fff6f4; box-shadow: 0 4px 14px rgba(226,59,46,.14); }
+.vs-crown { font-size: 12px; font-weight: 800; color: var(--red); }
+.vs-card .vs-name { font-weight: 800; font-size: 18px; }
+.vs-card .vs-shu { font-size: 13px; color: var(--muted); }
+.vs-mid { display: flex; align-items: center; font-weight: 800; color: var(--muted); }
+.versus-verdict { text-align: center; font-size: 18px; font-weight: 800; margin: 18px 0 8px; }
 .result-summary { color: #55504c; max-width: 520px; margin: 0 auto 18px; }
 .zone-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
 .zone { border-radius: 12px; padding: 12px; color: #fff; }

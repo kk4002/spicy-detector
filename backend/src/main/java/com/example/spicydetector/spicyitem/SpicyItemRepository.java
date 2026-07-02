@@ -23,4 +23,7 @@ public interface SpicyItemRepository extends JpaRepository<SpicyItem, Long> {
 
     /** 카테고리별 조회 (정렬은 서비스에서 대표 스코빌 기준으로 처리) */
     List<SpicyItem> findByCategory(Category category);
+
+    /** 이름으로 첫 항목 조회 (기준 음식 신라면 등 canonical 조회용) */
+    java.util.Optional<SpicyItem> findFirstByName(String name);
 }

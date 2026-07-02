@@ -38,6 +38,7 @@ export const api = {
       (category ? `?category=${category}` : '?') +
       (baseItemId ? `&baseItemId=${baseItemId}` : '')),
   getBaseFoods: () => request('/spicy-items/base-foods'),
+  compareItems: (aId, bId) => request(`/spicy-items/compare?aId=${aId}&bId=${bId}`),
 
   // 맵력테스트
   getQuestions: () => request('/spicy-test/questions'),

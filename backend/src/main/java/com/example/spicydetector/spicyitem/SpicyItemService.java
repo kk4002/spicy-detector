@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.spicydetector.common.Category;
 import com.example.spicydetector.common.NotFoundException;
+import com.example.spicydetector.spicyitem.dto.CompareResult;
 import com.example.spicydetector.spicyitem.dto.NeighborItem;
 import com.example.spicydetector.spicyitem.dto.RelativeScore;
 import com.example.spicydetector.spicyitem.dto.SimilarItem;
@@ -61,7 +62,8 @@ public class SpicyItemService {
         SpicyItem displayBase = base != null ? base : item;
         List<SimilarItem> similar = findSimilarItems(item, DEFAULT_SIMILAR_RANGE, displayBase, SIMILAR_LIMIT);
 
-        return new SpicyItemDetail(item, calculator.perceivedLabel(item), relativeScore, similar);
+        return new SpicyItemDetail(item, calculator.perceivedLabel(item),
+                relativeScore, shinRelative(item), similar);
     }
 
     /**
@@ -132,6 +134,51 @@ public class SpicyItemService {
             result.add(new NeighborItem(it, rel, isAnchor));
         }
         return result;
+    }
+
+    /**
+     * 두 음식의 매운맛을 대결시킨다. 대표 스코빌 기준으로 몇 배 매운지 계산한다.
+     */
+    public CompareResult compare(Long aId, Long bId) {
+        SpicyItem a = findRaw(aId);
+        SpicyItem b = findRaw(bId);
+        SpicyItemSummary sa = toSummary(a, null);
+        SpicyItemSummary sb = toSummary(b, null);
+
+        Integer aShu = a.representativeShu();
+        Integer bShu = b.representativeShu();
+        if (aShu == null || bShu == null || aShu <= 0 || bShu <= 0) {
+            return new CompareResult(sa, sb, null, null, null,
+                    "두 음식 중 공식/추정 수치가 없어 정확한 배수 비교는 어렵습니다.");
+        }
+        if (aShu.equals(bShu)) {
+            return new CompareResult(sa, sb, null, null, 1.0,
+                    String.format("%s와(과) %s는 매운맛이 비슷합니다.", a.getName(), b.getName()));
+        }
+
+        SpicyItem spicier = aShu > bShu ? a : b;
+        SpicyItem milder = aShu > bShu ? b : a;
+        int hi = Math.max(aShu, bShu);
+        int lo = Math.min(aShu, bShu);
+        double multiple = Math.round((hi / (double) lo) * 10) / 10.0;
+        String text = String.format("%s이(가) %s보다 약 %s배 맵습니다.",
+                spicier.getName(), milder.getName(), trimMultiple(multiple));
+        return new CompareResult(sa, sb, spicier.getName(), milder.getName(), multiple, text);
+    }
+
+    /** 1.0 → "1", 1.3 → "1.3" 처럼 표시 */
+    private String trimMultiple(double m) {
+        if (m == Math.floor(m)) {
+            return String.valueOf((int) m);
+        }
+        return String.valueOf(m);
+    }
+
+    /** canonical 신라면 대비 상대 지수(=100 기준). 없으면 null. */
+    public Integer shinRelative(SpicyItem item) {
+        return itemRepository.findFirstByName("신라면")
+                .map(shin -> calculator.relativeScoreValue(item, shin))
+                .orElse(null);
     }
 
     /** 기준 음식으로 쓰기 좋은 대표 음식 목록 (라면 중심). */

@@ -3,6 +3,7 @@ import { api } from '../api.js';
 import { useBaseFood } from '../context/BaseFoodContext.jsx';
 import ResultCard from '../components/ResultCard.jsx';
 import ResultActions from '../components/ResultActions.jsx';
+import { saveTolerance } from '../tolerance.js';
 
 export default function TestPage() {
   const [started, setStarted] = useState(false);
@@ -32,7 +33,10 @@ export default function TestPage() {
     setError('');
     const payload = questions.map((q) => ({ questionCode: q.code, answerCode: answers[q.code] }));
     api.submitTest(payload, baseItemId)
-      .then(setResult)
+      .then((r) => {
+        saveTolerance(r); // 내 맵력 저장 → 음식 상세에서 개인화 판독에 사용
+        setResult(r);
+      })
       .catch((e) => setError(e.message))
       .finally(() => setSubmitting(false));
   };

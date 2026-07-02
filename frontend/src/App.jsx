@@ -5,6 +5,7 @@ import DetailPage from './pages/DetailPage.jsx';
 import RankingPage from './pages/RankingPage.jsx';
 import TestPage from './pages/TestPage.jsx';
 import TestResultPage from './pages/TestResultPage.jsx';
+import VersusPage from './pages/VersusPage.jsx';
 import AdminPage from './pages/AdminPage.jsx';
 
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
         <nav className="app-nav">
           <NavLink to="/test">맵력판독</NavLink>
           <NavLink to="/search">음식검색</NavLink>
+          <NavLink to="/versus">매운맛대결</NavLink>
           <NavLink to="/ranking">매움랭킹</NavLink>
           <NavLink to="/admin" className="nav-admin">관리자</NavLink>
         </nav>
@@ -28,6 +30,7 @@ export default function App() {
           <Route path="/ranking" element={<RankingPage />} />
           <Route path="/test" element={<TestPage />} />
           <Route path="/test/result/:token" element={<TestResultPage />} />
+          <Route path="/versus" element={<VersusPage />} />
           <Route path="/admin" element={<AdminPage />} />
         </Routes>
       </main>

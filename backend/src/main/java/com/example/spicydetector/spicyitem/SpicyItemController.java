@@ -57,6 +57,13 @@ public class SpicyItemController {
         return body;
     }
 
+    /** 음식 vs 음식 대결 */
+    @GetMapping("/compare")
+    public com.example.spicydetector.spicyitem.dto.CompareResult compare(@RequestParam Long aId,
+                                                                         @RequestParam Long bId) {
+        return itemService.compare(aId, bId);
+    }
+
     /** 음식 상세 */
     @GetMapping("/{id}")
     public SpicyItemDetail detail(@PathVariable Long id,

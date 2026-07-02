@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { renderResultCanvas, canvasToBlob } from '../resultImage.js';
+import { levelTheme } from '../levelTheme.js';
 
 // 맵력테스트 결과 카드. 제출 직후/공유 조회 화면에서 공용으로 사용한다.
 export default function ResultCard({ result, shareUrl }) {
@@ -59,10 +60,13 @@ export default function ResultCard({ result, shareUrl }) {
     }
   };
 
+  const theme = levelTheme(result.level);
+
   return (
     <div className="result-card">
-      <div className="badge-emblem">Lv.{result.level}</div>
+      <div className="badge-emblem">{theme.emoji}<span className="emblem-lv">Lv.{result.level}</span></div>
       <h2 className="badge-name">{result.badgeName}</h2>
+      {theme.meme && <p className="badge-meme">“{theme.meme}”</p>}
       <p className="result-summary">{result.summary}</p>
 
       <div className="zone-grid">

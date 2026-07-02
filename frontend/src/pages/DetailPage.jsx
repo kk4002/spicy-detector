@@ -5,6 +5,7 @@ import { useBaseFood } from '../context/BaseFoodContext.jsx';
 import BaseFoodSelector from '../components/BaseFoodSelector.jsx';
 import DataBasisBadge from '../components/DataBasisBadge.jsx';
 import { formatRelative } from '../format.js';
+import { getTolerance, verdictFor } from '../tolerance.js';
 
 // 기준 음식(=100) 대비 상대 지수로 도전 난이도 구간을 판정한다.
 function challengeLevel(score) {
@@ -42,6 +43,10 @@ export default function DetailPage() {
   const rel = item.relativeScore;
   const challenge = rel ? challengeLevel(rel.scoreMax) : null;
 
+  // 내 맵력(테스트 결과) 기반 개인화 판독
+  const myTol = getTolerance();
+  const myVerdict = verdictFor(item.shinRelative, myTol);
+
   return (
     <div className="page detail-page">
       <div className="toolbar">
@@ -62,6 +67,19 @@ export default function DetailPage() {
           )}
         </div>
       </div>
+
+      {myVerdict ? (
+        <div className={`my-verdict ${myVerdict.cls}`}>
+          <span className="mv-badge">내 맵력: {myTol.badge}</span>
+          <span className="mv-label">{myVerdict.label}</span>
+          <span className="mv-desc">{myVerdict.desc}</span>
+        </div>
+      ) : (
+        <div className="my-verdict none">
+          <span className="mv-desc">내 맵력을 알면 "이거 먹을 수 있나?"를 판독해드려요.</span>
+          <Link to="/test" className="mv-cta">맵력 판독하기 →</Link>
+        </div>
+      )}
 
       <div className="detail-grid">
         <div className="stat">

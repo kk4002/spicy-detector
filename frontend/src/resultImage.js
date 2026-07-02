@@ -1,6 +1,8 @@
 // 맵력테스트 결과를 공유용 PNG 카드로 렌더링한다.
 // 외부 라이브러리/모델 없이 Canvas 2D 로 즉시 그린다(오프라인 가능).
 
+import { levelTheme } from './levelTheme.js';
+
 const KO_FONT = "'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif";
 
 function roundRect(ctx, x, y, w, h, r) {
@@ -21,6 +23,7 @@ export function renderResultCanvas(result) {
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext('2d');
+  const theme = levelTheme(result.level);
 
   // 배경 그라데이션
   const bg = ctx.createLinearGradient(0, 0, 0, H);
@@ -52,14 +55,24 @@ export function renderResultCanvas(result) {
   ctx.beginPath();
   ctx.arc(cx, cy, r, 0, Math.PI * 2);
   ctx.fill();
+  // 레벨 이모지
+  ctx.font = `56px ${KO_FONT}`;
+  ctx.fillText(theme.emoji, cx, cy - 4);
   ctx.fillStyle = '#ffffff';
-  ctx.font = `800 44px ${KO_FONT}`;
-  ctx.fillText(`Lv.${result.level}`, cx, cy + 16);
+  ctx.font = `800 30px ${KO_FONT}`;
+  ctx.fillText(`Lv.${result.level}`, cx, cy + 40);
 
   // 뱃지명
   ctx.fillStyle = '#e23b2e';
   ctx.font = `800 58px ${KO_FONT}`;
-  ctx.fillText(result.badgeName, W / 2, 410);
+  ctx.fillText(result.badgeName, W / 2, 400);
+
+  // 밈 문구
+  if (theme.meme) {
+    ctx.fillStyle = '#8a817c';
+    ctx.font = `italic 28px ${KO_FONT}`;
+    ctx.fillText(`“${theme.meme}”`, W / 2, 444);
+  }
 
   // 구간 3개
   const zones = [

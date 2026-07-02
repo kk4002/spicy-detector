@@ -34,11 +34,13 @@ public class SpicyItemDetail {
 
     /** 기준 음식 대비 상대 맵기 (기준 음식이 선택된 경우) */
     public final RelativeScore relativeScore;
+    /** 신라면(=100) 대비 상대 지수. 개인화 판독(내 맵력으로 먹을 수 있나)에 사용. */
+    public final Integer shinRelative;
     /** 비슷한 매운맛 음식 */
     public final List<SimilarItem> similarItems;
 
     public SpicyItemDetail(SpicyItem item, String perceivedLabel,
-                           RelativeScore relativeScore, List<SimilarItem> similarItems) {
+                           RelativeScore relativeScore, Integer shinRelative, List<SimilarItem> similarItems) {
         this.id = item.getId();
         this.name = item.getName();
         this.brand = item.getBrand();
@@ -59,6 +61,7 @@ public class SpicyItemDetail {
         this.perceivedLabel = perceivedLabel;
         this.description = item.getDescription();
         this.relativeScore = relativeScore;
+        this.shinRelative = shinRelative;
         this.similarItems = similarItems;
     }
 }
